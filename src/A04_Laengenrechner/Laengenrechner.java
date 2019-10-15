@@ -26,8 +26,8 @@ import java.awt.Font;
  * 
  * Error code #01: No Input Unit selected
  * Error code #02: No Output Unit selected
- * Error code #03: Input isn't a Number
- * Error code #04: "Nothing"
+ * Error code #03: No valid digit count to round selected
+ * Error code #04: Input isn't a Number
  * Error code #05: "Nothing"
  * Error code #06: "Nothing"
  * Error code #07: "Nothing"
@@ -41,6 +41,7 @@ public class Laengenrechner implements Length{
 
 	public static String Input;
 	public static String Output;
+	public static String DigitsToRound;
 
 	public static String NumberInputAsString;
 	public static double NumberInputAsDouble;
@@ -94,16 +95,20 @@ public class Laengenrechner implements Length{
 		
 		String[] Eingangsgrösse = {"Eingangsgrösse auswählen","Millimeter","Centimeter","Meter","Kilometer","Fuss","Yards","Inch/Zoll","Seemeile","Meile"};
 		JComboBox<String> comboBox = new JComboBox(Eingangsgrösse);
-		comboBox.setEditable(true);
 		comboBox.setBounds(192, 25, 100, 20);
 		frmLngenrechner.getContentPane().add(comboBox);
 			
 		
 		String[] Ausgangsgrössen = {"Ausgangsgrössen auswählen","Millimeter","Centimeter","Meter","Kilometer","Fuss","Yards","Inch/Zoll","Seemeile","Meile"};
 		JComboBox comboBox_1 = new JComboBox(Ausgangsgrössen);
-		comboBox_1.setEditable(true);
 		comboBox_1.setBounds(192, 64, 100, 20);
 		frmLngenrechner.getContentPane().add(comboBox_1);
+		
+		String[] Runden = {"Nachkommastellen auswählen","1","2","3","4","5","6","7","8","9","10"};
+		JComboBox comboBox_2 = new JComboBox(Runden);
+		comboBox_2.setSelectedIndex(5);
+		comboBox_2.setBounds(192, 100, 100, 20);
+		frmLngenrechner.getContentPane().add(comboBox_2);
 		
 		
 		txtResult = new JTextField();
@@ -120,6 +125,7 @@ public class Laengenrechner implements Length{
 							
 				Input = (String) comboBox.getSelectedItem();
 				Output = (String) comboBox_1.getSelectedItem();
+				DigitsToRound = (String) comboBox_2.getSelectedItem();
 				
 				if(Input == "Eingangsgrösse auswählen")
 				{
@@ -163,10 +169,19 @@ public class Laengenrechner implements Length{
             numeric = false;
         }
         if(numeric)
-        	ConvertInputToMeters();
+        {
+        	if (DigitsToRound != "Nachkommastellen auswählen")
+        	{
+        		ConvertInputToMeters();
+        	}
+        	else
+        	{
+        		JOptionPane.showMessageDialog(null, "Bitte wählen sie die Nachkommastellen aus", "ErrorCode " + "#03", JOptionPane.INFORMATION_MESSAGE);
+        	}
+        }        	
         else
         {
-        	JOptionPane.showMessageDialog(null, "Bitte geben sie eine Zahl ein", "ErrorCode " + "#03", JOptionPane.INFORMATION_MESSAGE);
+        	JOptionPane.showMessageDialog(null, "Bitte geben sie eine Zahl ein", "ErrorCode " + "#04", JOptionPane.INFORMATION_MESSAGE);
         }
             
     }
@@ -263,8 +278,7 @@ public class Laengenrechner implements Length{
 	public void Calculate()
 	{	
 		NumberFormat formatter = NumberFormat.getInstance();
-	    formatter.setMaximumFractionDigits(5);
+	    formatter.setMaximumFractionDigits(Integer.parseInt(DigitsToRound));
 		txtResult.setText(formatter.format(Result) + " " + Output);		
 	}
-				
 }
