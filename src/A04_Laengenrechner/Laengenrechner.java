@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
 
-import A04_Laengenrechner.Laengen.Length;
+import Interfaces.Laengen;
 import javax.swing.JLabel;
 import java.awt.Font;
 
@@ -37,7 +37,7 @@ import java.awt.Font;
  */
 
 
-public class Laengenrechner implements Length{
+public class Laengenrechner implements Laengen{
 
 	public static String Input;
 	public static String Output;
